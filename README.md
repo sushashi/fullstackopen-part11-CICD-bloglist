@@ -2,7 +2,7 @@
 
 This repository is used for the [exercise 11.20](https://fullstackopen.com/en/part11/expanding_further) of the CI/CD part of the Full stack open course. 
 
-Some restructuring has been done to the bloglist app constructed in the part 4 (backend) and 5 (frontend) in order to apply a CI/CD pipeline in this exercise. 
+Some restructuring has been done to the **bloglist app** constructed in the part 4 (backend) and 5 (frontend) in order to apply a CI/CD pipeline in this exercise. 
 
 ## Commands
 
