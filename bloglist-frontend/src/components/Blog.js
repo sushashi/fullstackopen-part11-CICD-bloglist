@@ -45,26 +45,6 @@ const Blog = ({ blog, handleLike, handleDelete }) => {
       </div>
     )
   }
-
-  // return (
-  //   <div style = {blogStyle} className = 'blogShown'>
-  //     {blog.title} {blog.author} {' '}
-  //     <Togglable buttonLabel = 'view'>
-  //       {blog.url} <br/>
-  //       likes {blog.likes} {' '}
-  //       <button onClick = {() => handleLike(blog)}>like</button> <br/>
-  //       {blog.user.name} <br/>
-  //       {actualUser
-  //         ? (
-  //           actualUser.username === blog.user.username
-  //             ? <button onClick = {handleDelete}>Remove</button>
-  //             : ''
-  //         )
-  //         : ''
-  //       }
-  //     </Togglable>
-  //   </div>
-  // )
 }
 
 export default Blog

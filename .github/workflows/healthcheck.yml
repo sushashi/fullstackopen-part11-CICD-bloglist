@@ -11,7 +11,7 @@ jobs:
       - name: Check the deployed service URL
         uses: jtalk/url-health-check-action@v3
         with:
-          url: https://fso-part11-bloglist.onrender.com//health
+          url: https://fso-part11-bloglist.onrender.com/health
       - name: Discord publish Health
         uses: rjstone/discord-webhook-notify@v1
         if: success()
