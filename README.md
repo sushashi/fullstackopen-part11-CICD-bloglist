@@ -19,6 +19,7 @@ Start by running `npm install`
 
 ## Links
 - Pokedex repository: https://github.com/sushashi/fullstackopen-part11-CICD-pokedex
+- Exercise 1: https://github.com/sushashi/fullstackopen-part11-CICD-pokedex/blob/master/exercise1.md
 - Deloyment: https://fso-part11-bloglist.onrender.com/
 
 
