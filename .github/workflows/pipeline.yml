@@ -20,10 +20,14 @@ jobs:
         run: npm install
       - name: Check style
         run: npm run eslint
+      - name: create env file
+        run: |
+          touch .env
+          echo ENGINE_API_KEY=${{ secrets.ENGINE_API_KEY }} >> .env
       - name: Build Frontend
         run: npm run build:front
-      # - name: Test Backend
-      #   run: npm run test
+      - name: Test Backend
+        run: npm run test
       - name: Test Frontend
         run: npm run test:front
       - name: e2e tests
