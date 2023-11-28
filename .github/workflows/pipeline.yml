@@ -1,0 +1,69 @@
+name: Deployment pipeline
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches: [master]
+    types: [opened, synchronize]
+    
+jobs:
+  simple_deployment_pipeline:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+      - name: Install dependencies
+        run: npm install
+      - name: Check style
+        run: npm run eslint
+      - name: Build Frontend
+        run: npm run build:front
+      - name: Test Backend
+        run: npm run test
+      - name: Test Frontend
+        run: npm run test:front
+      - name: e2e tests
+        uses: cypress-io/github-action@v5
+        with:
+          command: npm run cypress:front
+          start: npm run start:test
+          wait-on: http://localhost:3000
+      - name: Trigger deployment
+        if: ${{ !contains(toJson(github.event.commits.*.message) ,'#skip') && github.event_name == 'push' }}
+        run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - name: Build failed
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ !contains(toJson(github.event.commits.*.message) ,'#skip') && github.event_name == 'push' || failure()}}
+        with:
+          severity: error
+          details: Test Failed!
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          text: Build failed
+  
+  tag_release:
+    needs: [simple_deployment_pipeline]
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with: 
+          fetch-depth: '0'
+      - name: Bump version and push tag
+        if: ${{ !contains(toJson(github.event.commits.*.message) ,'#skip') && github.event_name == 'push' }}
+        uses: anothrNick/github-tag-action@8c8163ef62cf9c4677c8e800f36270af27930f42
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DEFAULT_BUMP: 'patch'
+      - name: Discord publish deployed
+        uses: rjstone/discord-webhook-notify@v1
+        if: ${{ !contains(toJson(github.event.commits.*.message) ,'#skip') && github.event_name == 'push' && success() }}
+        with:
+          severity: info
+          details: A new version of bloglist deployed
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          text: A new version of bloglist deployed
