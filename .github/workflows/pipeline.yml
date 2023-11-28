@@ -47,7 +47,7 @@ jobs:
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
       - name: Build failed
         uses: rjstone/discord-webhook-notify@v1
-        if: ${{ !contains(toJson(github.event.commits.*.message) ,'#skip') && github.event_name == 'push' || failure()}}
+        if: ${{ !contains(toJson(github.event.commits.*.message) ,'#skip') && github.event_name == 'push' && failure()}}
         with:
           severity: error
           details: Test Failed!
